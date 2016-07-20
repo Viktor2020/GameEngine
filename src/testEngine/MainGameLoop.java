@@ -39,7 +39,7 @@ public class MainGameLoop {
                 1, 0
         };
 
-        RawModel model = loader.loadToVAO(vertices,textureCoords, indices);
+        RawModel model = loader.loadToVAO(vertices, textureCoords, indices);
         ModelTexture modelTexture = new ModelTexture(loader.loadTexture("texture1"));
 
         TextureModel textureModel = new TextureModel(model, modelTexture);

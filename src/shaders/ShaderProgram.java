@@ -22,32 +22,9 @@ public abstract class ShaderProgram {
         programID = GL20.glCreateProgram();
         GL20.glAttachShader(programID, vertexShaderID);
         GL20.glAttachShader(programID, fragmentShaderID);
+        bindAttributes();
         GL20.glLinkProgram(programID);
         GL20.glValidateProgram(programID);
-        bindAttributes();
-    }
-
-    public void start() {
-        GL20.glUseProgram(programID);
-    }
-
-    public void stop() {
-        GL20.glUseProgram(0);
-    }
-
-    public void cleanUp() {
-        stop();
-        GL20.glDetachShader(programID, vertexShaderID);
-        GL20.glDetachShader(programID, fragmentShaderID);
-        GL20.glDeleteShader(vertexShaderID);
-        GL20.glDeleteShader(fragmentShaderID);
-        GL20.glDeleteProgram(programID);
-    }
-
-    protected abstract void bindAttributes();
-
-    protected void bindAttribute(int attribute, String variableName) {
-        GL20.glBindAttribLocation(programID, attribute, variableName);
     }
 
     private static int loadShader(String file, int type) {
@@ -71,11 +48,34 @@ public abstract class ShaderProgram {
 
         if (GL20.glGetShaderi(shaderID, GL20.GL_COMPILE_STATUS) == GL11.GL_NO_ERROR) {
             System.err.println(GL20.glGetShaderInfoLog(shaderID, 500));
-            System.err.println("Could not compile shader : "+shaderSource);
+            System.err.println("Could not compile shader : " + shaderSource);
             System.exit(-1);
         }
 
         return shaderID;
+    }
+
+    public void start() {
+        GL20.glUseProgram(programID);
+    }
+
+    public void stop() {
+        GL20.glUseProgram(0);
+    }
+
+    public void cleanUp() {
+        stop();
+        GL20.glDetachShader(programID, vertexShaderID);
+        GL20.glDetachShader(programID, fragmentShaderID);
+        GL20.glDeleteShader(vertexShaderID);
+        GL20.glDeleteShader(fragmentShaderID);
+        GL20.glDeleteProgram(programID);
+    }
+
+    protected abstract void bindAttributes();
+
+    protected void bindAttribute(int attribute, String variableName) {
+        GL20.glBindAttribLocation(programID, attribute, variableName);
     }
 
 }
