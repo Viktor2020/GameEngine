@@ -1,9 +1,12 @@
 package testEngine;
 
+import entities.Camera;
+import entities.Entity;
 import models.RawModel;
 import models.TextureModel;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Vector3f;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.Render;
@@ -17,9 +20,9 @@ public class MainGameLoop {
         DisplayManager.createDisplay();
         System.out.println("OpenGL version: " + GL11.glGetString(GL11.GL_VERSION));
         Loader loader = new Loader();
-        Render render = new Render();
 
         StaticShader shader = new StaticShader();
+        Render render = new Render(shader);
 
         float[] vertices = {
                 -0.5f, 0.5f, 0f,
@@ -44,11 +47,17 @@ public class MainGameLoop {
 
         TextureModel textureModel = new TextureModel(model, modelTexture);
 
-        while (!Display.isCloseRequested()) {
+        Entity entity = new Entity(textureModel, new Vector3f(0, 0, -1), 0, 0, 0, 1);
 
+        Camera camera = new Camera();
+
+
+        while (!Display.isCloseRequested()) {
+            camera.move();
             render.prepare();
             shader.start();
-            render.render(textureModel);
+            shader.loadViewMatrix(camera);
+            render.render(entity, shader);
             shader.stop();
             DisplayManager.updateDisplay();
 
