@@ -6,6 +6,7 @@ import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.RawModel;
 import renderEngine.Render;
+import shaders.StaticShader;
 
 public class MainGameLoop {
 
@@ -15,6 +16,9 @@ public class MainGameLoop {
         System.out.println("OpenGL version: " + GL11.glGetString(GL11.GL_VERSION));
         Loader loader = new Loader();
         Render render = new Render();
+
+        StaticShader shader = new StaticShader();
+
         float[] vertices = {
                 -0.5f, 0.5f, 0f,
                 -0.5f, -0.5f, 0f,
@@ -32,13 +36,13 @@ public class MainGameLoop {
         while (!Display.isCloseRequested()) {
 
             render.prepare();
-
+            shader.start();
             render.render(model);
-
+            shader.stop();
             DisplayManager.updateDisplay();
 
         }
-
+        shader.cleanUp();
         loader.cleatUp();
         DisplayManager.closeDisplay();
 
