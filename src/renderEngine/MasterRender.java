@@ -8,6 +8,8 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 import shaders.StaticShader;
+import shaders.TerrainShader;
+import terrains.Terrain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,8 +22,12 @@ public class MasterRender {
     private static final float NEAR_PLANE = 0.1f;
     private static final float FAR_PLANE = 1000;
 
-    private StaticShader shader = new StaticShader();
-    private EntityRender render;
+    private StaticShader staticShader = new StaticShader();
+    private EntityRender entityRender;
+
+    private TerrainShader terrainShader = new TerrainShader();
+    private TerrainRender terrainRender;
+    private List<Terrain> terrains = new ArrayList<>();
 
     private Map<TextureModel, List<Entity>> entities = new HashMap<>();
     private Matrix4f projectionMatrix;
@@ -30,18 +36,30 @@ public class MasterRender {
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_BACK);
         createProjectionMatrix();
-        render = new EntityRender(shader, projectionMatrix);
-
+        entityRender = new EntityRender(staticShader, projectionMatrix);
+        terrainRender  = new TerrainRender(terrainShader, projectionMatrix);
     }
 
     public void render(Light light, Camera camera) {
         prepare();
-        shader.start();
-        shader.loadLight(light);
-        shader.loadViewMatrix(camera);
-        render.render(entities);
-        shader.stop();
+        staticShader.start();
+        staticShader.loadLight(light);
+        staticShader.loadViewMatrix(camera);
+        entityRender.render(entities);
+        staticShader.stop();
+
+        terrainShader.start();
+        terrainShader.loadLight(light);
+        terrainShader.loadViewMatrix(camera);
+        terrainRender.render(terrains);
+        terrainShader.stop();
+
+        terrains.clear();
         entities.clear();
+    }
+
+    public void processTerrain(Terrain terrain) {
+        terrains.add(terrain);
     }
 
     public void processEntity(Entity entity) {
@@ -78,6 +96,7 @@ public class MasterRender {
     }
 
     public void cleanUp() {
-        shader.cleanUp();
+        staticShader.cleanUp();
+        terrainShader.cleanUp();
     }
 }
