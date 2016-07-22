@@ -6,7 +6,7 @@ import org.lwjgl.opengl.*;
 public class DisplayManager {
     private static int WIDTH = 1280;
     private static int HEIGHT = 720;
-    private static int FPS_CAP = 120;
+    private static int FPS_CAP = 60;
 
     public static void createDisplay() {
 
