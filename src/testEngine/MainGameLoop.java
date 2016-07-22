@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
+import renderEngine.OBJLoader;
 import renderEngine.Render;
 import shaders.StaticShader;
 import textures.ModelTexture;
@@ -24,35 +25,18 @@ public class MainGameLoop {
         StaticShader shader = new StaticShader();
         Render render = new Render(shader);
 
-        float[] vertices = {
-                -0.5f, 0.5f, 0f,
-                -0.5f, -0.5f, 0f,
-                0.5f, -0.5f, 0f,
-                0.5f, 0.5f, 0f,
-        };
-
-        int[] indices = {
-                0, 1, 3,
-                3, 1, 2
-        };
-        float[] textureCoords = {
-                0, 0,
-                0, 1,
-                1, 1,
-                1, 0
-        };
-
-        RawModel model = loader.loadToVAO(vertices, textureCoords, indices);
-        ModelTexture modelTexture = new ModelTexture(loader.loadTexture("texture1"));
+        RawModel model = OBJLoader.loadObjModel("stall", loader);
+        ModelTexture modelTexture = new ModelTexture(loader.loadTexture("stallTexture"));
 
         TextureModel textureModel = new TextureModel(model, modelTexture);
 
-        Entity entity = new Entity(textureModel, new Vector3f(0, 0, -1), 0, 0, 0, 1);
+        Entity entity = new Entity(textureModel, new Vector3f(0, 0, -25), 0, 0, 0, 1);
 
         Camera camera = new Camera();
 
 
         while (!Display.isCloseRequested()) {
+            entity.increaseRotation(0,1,0);
             camera.move();
             render.prepare();
             shader.start();
