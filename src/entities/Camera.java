@@ -11,7 +11,7 @@ public class Camera {
 
     public Camera() {
     }
-    private float drag = 0.1f;
+    private float drag = 0.2f;
     public void move() {
         if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
             position.z-=drag;
