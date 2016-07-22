@@ -6,8 +6,8 @@ import models.RawModel;
 import models.TextureModel;
 import org.lwjgl.opengl.*;
 import org.lwjgl.util.vector.Matrix4f;
-import shaders.ShaderProgram;
 import shaders.StaticShader;
+import textures.ModelTexture;
 import toolbox.Maths;
 
 public class Render {
@@ -27,7 +27,7 @@ public class Render {
 
     public void prepare() {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT|GL11.GL_DEPTH_BUFFER_BIT);
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(0, 0.3f, 0.0f, 1);
     }
 
@@ -41,6 +41,8 @@ public class Render {
         Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotX(),
                 entity.getRotY(), entity.getRotZ(), entity.getScale());
         shader.loadTransformationMatrix(transformationMatrix);
+        ModelTexture modelTexture = textureModel.getTexture();
+        shader.loadShineVariables(modelTexture.getShineDamper(), modelTexture.getReflectivity());
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureModel.getTexture().getTextureID());
         GL11.glDrawElements(GL11.GL_TRIANGLES, model.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);

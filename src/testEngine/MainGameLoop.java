@@ -26,11 +26,13 @@ public class MainGameLoop {
         ModelTexture modelTexture = new ModelTexture(loader.loadTexture("white"));
 
         TextureModel textureModel = new TextureModel(model, modelTexture);
+        textureModel.getTexture().setShineDamper(10);
+        textureModel.getTexture().setReflectivity(2);
 
         Entity entity = new Entity(textureModel, new Vector3f(0, 0, -25), 0, 0, 0, 1);
 
         Camera camera = new Camera();
-        Light light = new Light(new Vector3f(0, 10, -20), new Vector3f(1, 0.5f, 1));
+        Light light = new Light(new Vector3f(0, 0, -20), new Vector3f(1, 0.5f, 1));
 
         while (!Display.isCloseRequested()) {
             entity.increaseRotation(0, 1, 0);
