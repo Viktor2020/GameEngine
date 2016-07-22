@@ -26,9 +26,9 @@ public class Render {
     }
 
     public void prepare() {
-//        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glClearColor(1, 0, 0, 1);
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT|GL11.GL_DEPTH_BUFFER_BIT);
+        GL11.glClearColor(0, 0.3f, 0.0f, 1);
     }
 
     public void render(Entity entity, StaticShader shader) {
@@ -56,10 +56,10 @@ public class Render {
 
         projectionMatrix = new Matrix4f();
         projectionMatrix.m00 = x_scale;
-        projectionMatrix.m11 = x_scale;
+        projectionMatrix.m11 = y_scale;
         projectionMatrix.m22 = -((FAR_PLANE + NEAR_PLANE) / frustum_length);
         projectionMatrix.m23 = -1;
-        projectionMatrix.m32 = -((2 * FAR_PLANE * NEAR_PLANE) / frustum_length);
+        projectionMatrix.m32 = -((2 * NEAR_PLANE * FAR_PLANE) / frustum_length);
         projectionMatrix.m33 = 0;
 
     }
