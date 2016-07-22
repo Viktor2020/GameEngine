@@ -8,8 +8,8 @@ import toolbox.Maths;
 
 public class StaticShader extends ShaderProgram {
 
-    private static final String FRAGMENT_FILE = "src/shaders/fragmentShader.txt";
-    private static final String VERTEX_FILE = "src/shaders/vertexShader.txt";
+    private static final String FRAGMENT_FILE = "src/shaders/glsl/fragmentShader.txt";
+    private static final String VERTEX_FILE = "src/shaders/glsl/vertexShader.txt";
     private int locationTransformationMatrix;
     private int locationProjectionMatrix;
     private int locationViewMatrix;
