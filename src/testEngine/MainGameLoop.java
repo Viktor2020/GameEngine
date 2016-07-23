@@ -78,13 +78,12 @@ public class MainGameLoop {
         TextureModel bunnyTexure = new TextureModel(bunnyModel, new ModelTexture(loader.loadTexture("white")));
         Player player = new Player(bunnyTexure, new Vector3f(0, 0, -30), new Vector3f(), 1);
 
-        Camera camera = new Camera();
-        camera.getPosition().y = 20;
-        camera.getRotation().y = 10;
+        Camera camera = new Camera(player);
         MasterRender renderer = new MasterRender();
 
         while(!Display.isCloseRequested()){
             player.move();
+            camera.move();
 
 
             renderer.processEntity(player);
