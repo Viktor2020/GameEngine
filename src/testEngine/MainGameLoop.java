@@ -11,6 +11,8 @@ import org.lwjgl.util.vector.Vector3f;
 import renderEngine.*;
 import terrains.Terrain;
 import textures.ModelTexture;
+import textures.TerrainTexture;
+import textures.TerrainTexturePack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,14 @@ public class MainGameLoop {
 
         DisplayManager.createDisplay();
         Loader loader = new Loader();
+
+        TerrainTexture bgTexture = new TerrainTexture(loader.loadTexture("grassy"));
+        TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("dirt"));
+        TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("pinkFlowers"));
+        TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("path"));
+
+        TerrainTexturePack texturePack = new TerrainTexturePack(bgTexture, rTexture, gTexture, bTexture);
+        TerrainTexture blendMapTexture = new TerrainTexture(loader.loadTexture("blendMap"));
 
         ModelData dataTree = OBJFileLoader.loadOBJ("tree");
         ModelData dataFern = OBJFileLoader.loadOBJ("fern");
@@ -60,7 +70,7 @@ public class MainGameLoop {
         Light light = new Light(new Vector3f(20000,20000,2000),new Vector3f(1,1,1));
 
 //        Terrain terrain = new Terrain(0,0,loader,new ModelTexture(loader.loadTexture("grass")));
-        Terrain terrain2 = new Terrain(-0.5f,-0.5f,loader,new ModelTexture(loader.loadTexture("grass")));
+        Terrain terrain2 = new Terrain(-0.5f,-0.5f,loader,texturePack, blendMapTexture);
 
         Camera camera = new Camera();
         MasterRender renderer = new MasterRender();

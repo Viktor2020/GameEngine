@@ -7,7 +7,7 @@ import org.lwjgl.util.vector.Vector3f;
 import renderEngine.Light;
 import toolbox.Maths;
 
-public class TerrainShader extends ShaderProgram{
+public class TerrainShader extends ShaderProgram {
     private static final String FRAGMENT_FILE = "src/shaders/glsl/terrainFragmentShader.txt";
     private static final String VERTEX_FILE = "src/shaders/glsl/terrainVertexShader.txt";
     private int locationTransformationMatrix;
@@ -18,6 +18,12 @@ public class TerrainShader extends ShaderProgram{
     private int locationShineDamper;
     private int locationReflectivity;
     private int locationSkyColour;
+
+    private int locationBackgroundTexture;
+    private int locationRTexture;
+    private int locationGTexture;
+    private int locationBTexture;
+    private int locationBlendMapTexture;
 
     public TerrainShader() {
         super(VERTEX_FILE, FRAGMENT_FILE);
@@ -40,6 +46,19 @@ public class TerrainShader extends ShaderProgram{
         locationShineDamper = super.getUniformLocation("shineDamper");
         locationReflectivity = super.getUniformLocation("reflectivity");
         locationSkyColour = super.getUniformLocation("skyColour");
+        locationBackgroundTexture = super.getUniformLocation("backgroundTexture");
+        locationRTexture = super.getUniformLocation("rTexture");
+        locationGTexture = super.getUniformLocation("gTexture");
+        locationBTexture = super.getUniformLocation("bTexture");
+        locationBlendMapTexture = super.getUniformLocation("blendMap");
+    }
+
+    public void connectTextureUnits() {
+        super.loadInt(locationBackgroundTexture, 0);
+        super.loadInt(locationRTexture, 1);
+        super.loadInt(locationGTexture, 2);
+        super.loadInt(locationBTexture, 3);
+        super.loadInt(locationBlendMapTexture, 4);
     }
 
     public void loadSkyColour(float r, float g, float b) {
