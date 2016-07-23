@@ -13,6 +13,7 @@ public class Camera {
     private float angelAroundPlayer = 0;
 
     private Player player;
+    private float playerHeight = 10;
 
     public Camera(Player player) {
         this.player = player;
@@ -40,7 +41,7 @@ public class Camera {
         float offsetZ = (float) (horizontalDistance * Math.cos(Math.toRadians(theta)));
         position.x = player.getPosition().x - offsetX;
         position.z = player.getPosition().z - offsetZ;
-        position.y = player.getPosition().y + verticalDistance;
+        position.y = player.getPosition().y + verticalDistance + playerHeight;
     }
 
     private void calculateZoom() {

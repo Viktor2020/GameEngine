@@ -39,7 +39,7 @@ public class MainGameLoop {
 
         TerrainTexturePack texturePack = new TerrainTexturePack(bgTexture, rTexture, gTexture, bTexture);
         TerrainTexture blendMapTexture = new TerrainTexture(loader.loadTexture("blendMap"));
-        Terrain terrain = new Terrain(-0f, -1f, loader, texturePack, blendMapTexture, "heightMap");
+        Terrain terrain = new Terrain(-0.5f, -0.5f, loader, texturePack, blendMapTexture, "heightMap");
 
         ModelData dataTree = OBJFileLoader.loadOBJ("tree");
         ModelData dataFern = OBJFileLoader.loadOBJ("fern");
@@ -139,7 +139,7 @@ public class MainGameLoop {
 
 
 
-        Player player = new Player(playerTexture, new Vector3f(0, 0, -30), new Vector3f(), 1);
+        Player player = new Player(playerTexture, new Vector3f(0, 0, 0), new Vector3f(), 1);
 
         Camera camera = new Camera(player);
         MasterRender renderer = new MasterRender();
