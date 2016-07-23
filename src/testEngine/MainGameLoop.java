@@ -2,6 +2,7 @@ package testEngine;
 
 import entities.Camera;
 import entities.Entity;
+import entities.Player;
 import models.RawModel;
 import models.TextureModel;
 import objConverter.ModelData;
@@ -72,13 +73,21 @@ public class MainGameLoop {
 //        Terrain terrain = new Terrain(0,0,loader,new ModelTexture(loader.loadTexture("grass")));
         Terrain terrain2 = new Terrain(-0.5f,-0.5f,loader,texturePack, blendMapTexture);
 
+        ModelData bunnyData = OBJFileLoader.loadOBJ("stanfordBunny");
+        RawModel bunnyModel = loader.loadToVAO(bunnyData.getVertices(), bunnyData.getTextureCoords(), bunnyData.getNormals(), bunnyData.getIndices());
+        TextureModel bunnyTexure = new TextureModel(bunnyModel, new ModelTexture(loader.loadTexture("white")));
+        Player player = new Player(bunnyTexure, new Vector3f(0, 0, -30), new Vector3f(), 1);
+
         Camera camera = new Camera();
+        camera.getPosition().y = 20;
+        camera.getRotation().y = 10;
         MasterRender renderer = new MasterRender();
 
         while(!Display.isCloseRequested()){
-            camera.move();
+            player.move();
 
-//            renderer.processTerrain(terrain);
+
+            renderer.processEntity(player);
             renderer.processTerrain(terrain2);
             for(Entity entity:entities){
                 renderer.processEntity(entity);
