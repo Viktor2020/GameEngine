@@ -70,8 +70,8 @@ public class MainGameLoop {
 
         Light light = new Light(new Vector3f(20000,20000,2000),new Vector3f(1,1,1));
 
-//        Terrain terrain = new Terrain(0,0,loader,new ModelTexture(loader.loadTexture("grass")));
-        Terrain terrain2 = new Terrain(-0.5f,-0.5f,loader,texturePack, blendMapTexture);
+        Terrain terrain = new Terrain(-0f,-1f,loader,texturePack, blendMapTexture, "heightMap");
+        Terrain terrain2 = new Terrain(-1f,-1f,loader,texturePack, blendMapTexture, "heightMap");
 
         ModelData bunnyData = OBJFileLoader.loadOBJ("stanfordBunny");
         RawModel bunnyModel = loader.loadToVAO(bunnyData.getVertices(), bunnyData.getTextureCoords(), bunnyData.getNormals(), bunnyData.getIndices());
@@ -88,6 +88,7 @@ public class MainGameLoop {
 
             renderer.processEntity(player);
             renderer.processTerrain(terrain2);
+            renderer.processTerrain(terrain);
             for(Entity entity:entities){
                 renderer.processEntity(entity);
             }
