@@ -4,6 +4,8 @@ import entities.Camera;
 import entities.Entity;
 import models.RawModel;
 import models.TextureModel;
+import objConverter.ModelData;
+import objConverter.OBJFileLoader;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 import renderEngine.*;
@@ -21,12 +23,16 @@ public class MainGameLoop {
         DisplayManager.createDisplay();
         Loader loader = new Loader();
 
+        ModelData dataTree = OBJFileLoader.loadOBJ("tree");
+        ModelData dataFern = OBJFileLoader.loadOBJ("fern");
+        ModelData dataGrass = OBJFileLoader.loadOBJ("grassModel");
 
-        RawModel model = OBJLoader.loadObjModel("tree", loader);
-        RawModel modelFern = OBJLoader.loadObjModel("fern", loader);
-        RawModel modelGrass = OBJLoader.loadObjModel("grassModel", loader);
+        RawModel model = loader.loadToVAO(dataTree.getVertices(), dataTree.getTextureCoords(), dataTree.getNormals(), dataTree.getIndices());
+        RawModel modelFern = loader.loadToVAO(dataFern.getVertices(), dataFern.getTextureCoords(), dataFern.getNormals(), dataFern.getIndices());
+        RawModel modelGrass = loader.loadToVAO(dataGrass.getVertices(), dataGrass.getTextureCoords(), dataGrass.getNormals(), dataGrass.getIndices());
 
-        TextureModel staticModel = new TextureModel(model,new ModelTexture(loader.loadTexture("tree")));
+
+        TextureModel textureTree = new TextureModel(model,new ModelTexture(loader.loadTexture("tree")));
 
         TextureModel fernTexture = new TextureModel(modelFern,new ModelTexture(loader.loadTexture("fern")));
         fernTexture.getTexture().setHasTransparency(true);
@@ -36,10 +42,10 @@ public class MainGameLoop {
         grassTexture.getTexture().setHasTransparency(true);
         grassTexture.getTexture().setUseFakeLighting(true);
 
-        List<Entity> entities = new ArrayList<Entity>();
+        List<Entity> entities = new ArrayList<>();
         Random random = new Random();
         for(int i=0;i<500;i++){
-            entities.add(new Entity(staticModel, new Vector3f(random.nextFloat()*800 - 400,0,random.nextFloat() * -600),new Vector3f(),3));
+            entities.add(new Entity(textureTree, new Vector3f(random.nextFloat()*800 - 400,0,random.nextFloat() * -600),new Vector3f(),3));
         }
         for(int i=0;i<500;i++){
             entities.add(new Entity(fernTexture, new Vector3f(random.nextFloat()*800 - 400,0,random.nextFloat() * -600),new Vector3f(),1f));
