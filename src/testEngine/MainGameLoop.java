@@ -57,7 +57,10 @@ public class MainGameLoop {
 
         TextureModel treeTexture = new TextureModel(modelTree, new ModelTexture(loader.loadTexture("tree")));
 
-        TextureModel fernTexture = new TextureModel(modelFern, new ModelTexture(loader.loadTexture("fern")));
+        ModelTexture fernTextureAtlas = new ModelTexture(loader.loadTexture("fern"));
+        fernTextureAtlas.setNumberOfRows(2);
+
+        TextureModel fernTexture = new TextureModel(modelFern, fernTextureAtlas);
         fernTexture.getTexture().setHasTransparency(true);
         fernTexture.getTexture().setUseFakeLighting(true);
 
@@ -88,7 +91,7 @@ public class MainGameLoop {
                 x = random.nextFloat() * 800 - 400;
                 z = random.nextFloat() * -600;
                 y = terrain.getHeightOfTerrain(x, z);
-                entities.add(new Entity(fernTexture, new Vector3f(x, y, z), new Vector3f(0, random.nextFloat() * 360, 0), 1f));
+                entities.add(new Entity(fernTexture, random.nextInt(4), new Vector3f(x, y, z), new Vector3f(0, random.nextFloat() * 360, 0), 1f));
 
             }
             if (i % 25 == 0) {
