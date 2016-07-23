@@ -3,11 +3,14 @@ package testEngine;
 import entities.Camera;
 import entities.Entity;
 import entities.Player;
+import guis.GuiRender;
+import guis.GuiTexture;
 import models.RawModel;
 import models.TextureModel;
 import objConverter.ModelData;
 import objConverter.OBJFileLoader;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import renderEngine.DisplayManager;
 import renderEngine.Light;
@@ -29,7 +32,7 @@ public class MainGameLoop {
         DisplayManager.createDisplay();
         Loader loader = new Loader();
 
-        TerrainTexture bgTexture = new TerrainTexture(loader.loadTexture("grassy"));
+        TerrainTexture bgTexture = new TerrainTexture(loader.loadTexture("grassy3"));
         TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("dirt"));
         TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("pinkFlowers"));
         TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("path"));
@@ -45,6 +48,7 @@ public class MainGameLoop {
         ModelData dataLowTree = OBJFileLoader.loadOBJ("lowPolyTree");
         ModelData dataPerson = OBJFileLoader.loadOBJ("person");
         ModelData bunnyData = OBJFileLoader.loadOBJ("stanfordBunny");
+        ModelData dataPine = OBJFileLoader.loadOBJ("pine");
 
         RawModel modelTree = loader.loadToVAO(dataTree.getVertices(), dataTree.getTextureCoords(), dataTree.getNormals(), dataTree.getIndices());
         RawModel modelFern = loader.loadToVAO(dataFern.getVertices(), dataFern.getTextureCoords(), dataFern.getNormals(), dataFern.getIndices());
@@ -53,6 +57,7 @@ public class MainGameLoop {
         RawModel modelLowTree = loader.loadToVAO(dataLowTree.getVertices(), dataLowTree.getTextureCoords(), dataLowTree.getNormals(), dataLowTree.getIndices());
         RawModel modelPerson = loader.loadToVAO(dataPerson.getVertices(), dataPerson.getTextureCoords(), dataPerson.getNormals(), dataPerson.getIndices());
         RawModel bunnyModel = loader.loadToVAO(bunnyData.getVertices(), bunnyData.getTextureCoords(), bunnyData.getNormals(), bunnyData.getIndices());
+        RawModel modelPine = loader.loadToVAO(dataPine.getVertices(), dataPine.getTextureCoords(), dataPine.getNormals(), dataPine.getIndices());
 
 
         TextureModel treeTexture = new TextureModel(modelTree, new ModelTexture(loader.loadTexture("tree")));
@@ -69,9 +74,10 @@ public class MainGameLoop {
         grassTexture.getTexture().setUseFakeLighting(true);
 
         TextureModel boxTexture = new TextureModel(modelBox, new ModelTexture(loader.loadTexture("box")));
-        TextureModel lowTreeTextuere = new TextureModel(modelLowTree, new ModelTexture(loader.loadTexture("lowPolyTree")));
-        TextureModel bunnyTexure = new TextureModel(bunnyModel, new ModelTexture(loader.loadTexture("white")));
+        TextureModel lowTreeTexture = new TextureModel(modelLowTree, new ModelTexture(loader.loadTexture("lowPolyTree")));
+        TextureModel bunnyTexture = new TextureModel(bunnyModel, new ModelTexture(loader.loadTexture("white")));
         TextureModel playerTexture = new TextureModel(modelPerson, new ModelTexture(loader.loadTexture("playerTexture")));
+        TextureModel pineTexture = new TextureModel(modelPine, new ModelTexture(loader.loadTexture("pine")));
 
 
         List<Entity> entities = new ArrayList<>();
@@ -93,6 +99,10 @@ public class MainGameLoop {
                 y = terrain.getHeightOfTerrain(x, z);
                 entities.add(new Entity(fernTexture, random.nextInt(4), new Vector3f(x, y, z), new Vector3f(0, random.nextFloat() * 360, 0), 1f));
 
+                x = random.nextFloat() * 800 - 400;
+                z = random.nextFloat() * -600;
+                y = terrain.getHeightOfTerrain(x, z);
+                entities.add(new Entity(pineTexture, random.nextInt(4), new Vector3f(x, y, z), new Vector3f(0, random.nextFloat() * 360, 0), 1f));
             }
             if (i % 25 == 0) {
                 x = random.nextFloat() * 800 - 400;
@@ -110,17 +120,20 @@ public class MainGameLoop {
                 x = random.nextFloat() * 800 - 400;
                 z = random.nextFloat() * -600;
                 y = terrain.getHeightOfTerrain(x, z);
-                entities.add(new Entity(lowTreeTextuere, new Vector3f(x, y, z), new Vector3f(0, random.nextFloat() * 360, 0), 1f));
+                entities.add(new Entity(lowTreeTexture, new Vector3f(x, y, z), new Vector3f(0, random.nextFloat() * 360, 0), 1f));
             }
             if (i % 100 == 0) {
                 x = random.nextFloat() * 800 - 400;
                 z = random.nextFloat() * -600;
                 y = terrain.getHeightOfTerrain(x, z);
-                entities.add(new Entity(bunnyTexure, new Vector3f(x, y, z), new Vector3f(0, random.nextFloat() * 360, 0), 1f));
+                entities.add(new Entity(bunnyTexture, new Vector3f(x, y, z), new Vector3f(0, random.nextFloat() * 360, 0), 1f));
             }
 
         }
 
+        List<GuiTexture> guis = new ArrayList<>();
+        GuiTexture gui = new GuiTexture(loader.loadTexture("health"), new Vector2f(0.5f,0.5f), new Vector2f(0.25f, 0.25f));
+        guis.add(gui);
 
         Light light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
 
@@ -130,6 +143,8 @@ public class MainGameLoop {
 
         Camera camera = new Camera(player);
         MasterRender renderer = new MasterRender();
+
+        GuiRender guiRender = new GuiRender(loader);
 
         while (!Display.isCloseRequested()) {
             player.move(terrain);
@@ -142,9 +157,11 @@ public class MainGameLoop {
                 renderer.processEntity(entity);
             }
             renderer.render(light, camera);
+            guiRender.render(guis);
             DisplayManager.updateDisplay();
         }
 
+        guiRender.cleanUp();
         renderer.cleanUp();
         loader.cleanUp();
         DisplayManager.closeDisplay();
