@@ -132,19 +132,17 @@ public class MainGameLoop {
         }
 
         List<GuiTexture> guis = new ArrayList<>();
-        GuiTexture gui = new GuiTexture(loader.loadTexture("health"), new Vector2f(0.5f,0.5f), new Vector2f(0.25f, 0.25f));
+        GuiTexture gui = new GuiTexture(loader.loadTexture("health"), new Vector2f(0.5f, 0.5f), new Vector2f(0.25f, 0.25f));
         guis.add(gui);
 
-        Light light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(10, 1, 1));
         List<Light> lights = new ArrayList<>();
-        lights.add(light);
-        lights.add(new Light(new Vector3f(0, 100, 0), new Vector3f(0.1f, .51f, 10)));
-//        lights.add(new Light(new Vector3f(-20000, 20000, -2000), new Vector3f(0.5f, 11, 0.4f)));
-//        lights.add(new Light(new Vector3f(-0, 20000, -0), new Vector3f(11f, 11f, 0.6f)));
+        lights.add(new Light(new Vector3f(0, 1000, -7000), new Vector3f(0.4f, 0.4f, 0.4f)));
+        lights.add(new Light(new Vector3f(185, 10, -293), new Vector3f(2f, 0f, 0), new Vector3f(1, 0.01f, 0.002f)));
+        lights.add(new Light(new Vector3f(370, 17, -300), new Vector3f(0f, 2f, 0), new Vector3f(1, 0.01f, 0.002f)));
+        lights.add(new Light(new Vector3f(185, 10, -282), new Vector3f(0f, 0f, 2), new Vector3f(1, 0.01f, 0.002f)));
 
 
-
-        Player player = new Player(playerTexture, new Vector3f(0, 0, 0), new Vector3f(), 1);
+        Player player = new Player(playerTexture, new Vector3f(153, 5, -274), new Vector3f(0, 100, 0), 1);
 
         Camera camera = new Camera(player);
         MasterRender renderer = new MasterRender();
