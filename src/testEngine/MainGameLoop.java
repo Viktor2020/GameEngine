@@ -135,7 +135,12 @@ public class MainGameLoop {
         GuiTexture gui = new GuiTexture(loader.loadTexture("health"), new Vector2f(0.5f,0.5f), new Vector2f(0.25f, 0.25f));
         guis.add(gui);
 
-        Light light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
+        Light light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(10, 1, 1));
+        List<Light> lights = new ArrayList<>();
+        lights.add(light);
+        lights.add(new Light(new Vector3f(0, 100, 0), new Vector3f(0.1f, .51f, 10)));
+//        lights.add(new Light(new Vector3f(-20000, 20000, -2000), new Vector3f(0.5f, 11, 0.4f)));
+//        lights.add(new Light(new Vector3f(-0, 20000, -0), new Vector3f(11f, 11f, 0.6f)));
 
 
 
@@ -156,7 +161,7 @@ public class MainGameLoop {
             for (Entity entity : entities) {
                 renderer.processEntity(entity);
             }
-            renderer.render(light, camera);
+            renderer.render(lights, camera);
             guiRender.render(guis);
             DisplayManager.updateDisplay();
         }
