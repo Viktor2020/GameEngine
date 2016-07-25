@@ -145,7 +145,7 @@ public class MainGameLoop {
         Player player = new Player(playerTexture, new Vector3f(153, 5, -274), new Vector3f(0, 100, 0), 1);
 
         Camera camera = new Camera(player);
-        MasterRender renderer = new MasterRender();
+        MasterRender renderer = new MasterRender(loader);
 
         GuiRender guiRender = new GuiRender(loader);
 
