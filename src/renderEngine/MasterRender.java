@@ -25,7 +25,7 @@ public class MasterRender {
 
     private static final float RED = 0.5f;
     private static final float GREEN = 0.5f;
-    private static final float BLUE = 0.5f;
+    private static final float BLUE = 0.6f;
 
     private SkyboxRender skyboxRender;
 
@@ -71,7 +71,7 @@ public class MasterRender {
         terrainRender.render(terrains);
         terrainShader.stop();
 
-        skyboxRender.render(camera);
+        skyboxRender.render(camera, RED, GREEN, BLUE);
 
         terrains.clear();
         entities.clear();
