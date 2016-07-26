@@ -77,6 +77,10 @@ public class MasterRender {
         entities.clear();
     }
 
+    public Matrix4f getProjectionMatrix() {
+        return projectionMatrix;
+    }
+
     public void processTerrain(Terrain terrain) {
         terrains.add(terrain);
     }

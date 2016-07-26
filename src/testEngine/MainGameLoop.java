@@ -20,6 +20,7 @@ import terrains.Terrain;
 import textures.ModelTexture;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
+import toolbox.MousePicker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -149,10 +150,14 @@ public class MainGameLoop {
 
         GuiRender guiRender = new GuiRender(loader);
 
+        MousePicker mousePicker = new MousePicker(camera, renderer.getProjectionMatrix());
+
         while (!Display.isCloseRequested()) {
             player.move(terrain);
             camera.move();
 
+            mousePicker.update();
+            System.out.println(mousePicker.getCurrentRay());
 
             renderer.processEntity(player);
             renderer.processTerrain(terrain);
