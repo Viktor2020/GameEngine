@@ -50,6 +50,7 @@ public class MainGameLoop {
         ModelData dataPerson = OBJFileLoader.loadOBJ("person");
         ModelData bunnyData = OBJFileLoader.loadOBJ("stanfordBunny");
         ModelData dataPine = OBJFileLoader.loadOBJ("pine");
+        ModelData dataLamp = OBJFileLoader.loadOBJ("lamp");
 
         RawModel modelTree = loader.loadToVAO(dataTree.getVertices(), dataTree.getTextureCoords(), dataTree.getNormals(), dataTree.getIndices());
         RawModel modelFern = loader.loadToVAO(dataFern.getVertices(), dataFern.getTextureCoords(), dataFern.getNormals(), dataFern.getIndices());
@@ -59,6 +60,7 @@ public class MainGameLoop {
         RawModel modelPerson = loader.loadToVAO(dataPerson.getVertices(), dataPerson.getTextureCoords(), dataPerson.getNormals(), dataPerson.getIndices());
         RawModel bunnyModel = loader.loadToVAO(bunnyData.getVertices(), bunnyData.getTextureCoords(), bunnyData.getNormals(), bunnyData.getIndices());
         RawModel modelPine = loader.loadToVAO(dataPine.getVertices(), dataPine.getTextureCoords(), dataPine.getNormals(), dataPine.getIndices());
+        RawModel modelLamp = loader.loadToVAO(dataLamp.getVertices(), dataLamp.getTextureCoords(), dataLamp.getNormals(), dataLamp.getIndices());
 
 
         TextureModel treeTexture = new TextureModel(modelTree, new ModelTexture(loader.loadTexture("tree")));
@@ -79,6 +81,7 @@ public class MainGameLoop {
         TextureModel bunnyTexture = new TextureModel(bunnyModel, new ModelTexture(loader.loadTexture("white")));
         TextureModel playerTexture = new TextureModel(modelPerson, new ModelTexture(loader.loadTexture("playerTexture")));
         TextureModel pineTexture = new TextureModel(modelPine, new ModelTexture(loader.loadTexture("pine")));
+        TextureModel lampTexture = new TextureModel(modelLamp, new ModelTexture(loader.loadTexture("lamp")));
 
 
         List<Entity> entities = new ArrayList<>();
@@ -138,26 +141,36 @@ public class MainGameLoop {
 
         List<Light> lights = new ArrayList<>();
         lights.add(new Light(new Vector3f(0, 1000, -7000), new Vector3f(0.4f, 0.4f, 0.4f)));
-        lights.add(new Light(new Vector3f(185, 10, -293), new Vector3f(2f, 0f, 0), new Vector3f(1, 0.01f, 0.002f)));
-        lights.add(new Light(new Vector3f(370, 17, -300), new Vector3f(0f, 2f, 0), new Vector3f(1, 0.01f, 0.002f)));
-        lights.add(new Light(new Vector3f(185, 10, -282), new Vector3f(0f, 0f, 2), new Vector3f(1, 0.01f, 0.002f)));
+        Light light = new Light(new Vector3f(185, 10, -293), new Vector3f(2f, 0f, 0), new Vector3f(1, 0.01f, 0.002f));
+        lights.add(light);
+        lights.add(new Light(new Vector3f(370, 17, -300), new Vector3f(0f, 2f, 2), new Vector3f(1, 0.01f, 0.002f)));
+        lights.add(new Light(new Vector3f(293, 7, -305), new Vector3f(2f, 2f, 0), new Vector3f(1, 0.01f, 0.002f)));
 
 
         Player player = new Player(playerTexture, new Vector3f(153, 5, -274), new Vector3f(0, 100, 0), 1);
+
+        Entity lamp = new Entity(lampTexture, new Vector3f(185, -4.7f, -293), new Vector3f(0, 0, 0), 1);
+        entities.add(lamp);
+        entities.add(new Entity(lampTexture, new Vector3f(370, 4.2f, -300), new Vector3f(0, 0, 0), 1));
+        entities.add(new Entity(lampTexture, new Vector3f(293, -6.8f, -305), new Vector3f(0, 0, 0), 1));
 
         Camera camera = new Camera(player);
         MasterRender renderer = new MasterRender(loader);
 
         GuiRender guiRender = new GuiRender(loader);
 
-        MousePicker mousePicker = new MousePicker(camera, renderer.getProjectionMatrix());
+        MousePicker mousePicker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain);
 
         while (!Display.isCloseRequested()) {
             player.move(terrain);
             camera.move();
 
             mousePicker.update();
-            System.out.println(mousePicker.getCurrentRay());
+            Vector3f position = (mousePicker.getCurrentTerrainPoint());
+            if (position != null) {
+                lamp.setPosition(position);
+                light.getPosition().set(position.x, position.y+15, position.z);
+            }
 
             renderer.processEntity(player);
             renderer.processTerrain(terrain);
